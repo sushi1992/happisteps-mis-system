@@ -10,7 +10,7 @@ internal class ChildIdentifierConfiguration : IEntityTypeConfiguration<ChildIden
     {
         builder.ToTable("ChildIdentifiers");
 
-        builder.HasKey("ChildId", nameof(ChildIdentifier.Type));
+        builder.HasKey(ci => new { ci.ChildId, ci.Type });
 
         builder.Property(i => i.Type)
                .HasConversion<string>();

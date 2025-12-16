@@ -16,16 +16,44 @@ public class HappiStepsDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Child>(entity =>
+        // --------------------
+        // Child
+        // --------------------
+        modelBuilder.Entity<Child>(builder =>
         {
-            entity.HasKey(c => c.ChildId);
+            builder.HasKey(c => c.ChildId);
 
-            entity.Property(c => c.FirstName).IsRequired();
-            entity.Property(c => c.LastName).IsRequired();
+            builder.Property(c => c.FirstName)
+                   .IsRequired()
+                   .HasMaxLength(100);
 
-            entity.HasMany<ChildIdentifier>("_identifiers")
-                  .WithOne()
-                  .OnDelete(DeleteBehavior.Cascade);
+            builder.Property(c => c.LastName)
+                   .IsRequired()
+                   .HasMaxLength(100);
+
+            builder.HasMany(c => c.Identifiers)
+                   .WithOne()
+                   .HasForeignKey(ci => ci.ChildId)
+                   .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        // --------------------
+        // ChildIdentifier
+        // --------------------
+        modelBuilder.Entity<ChildIdentifier>(builder =>
+        {
+            // ✅ Composite primary key
+            builder.HasKey(ci => new { ci.ChildId, ci.Type });
+
+            builder.Property(ci => ci.Type)
+                   .IsRequired();
+
+            builder.Property(ci => ci.Value)
+                   .IsRequired()
+                   .HasMaxLength(50);
+
+            builder.Property(ci => ci.AssignedAt)
+                   .IsRequired();
         });
     }
 }

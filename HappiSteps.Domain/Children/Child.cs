@@ -59,6 +59,12 @@ public class Child
         if (_identifiers.Any(i => i.Type == IdentifierType.UPN))
             throw new InvalidOperationException("UPN is already assigned and cannot be changed.");
 
-        _identifiers.Add(ChildIdentifier.CreateUpn(upn));
+        _identifiers.Add(
+            new ChildIdentifier(
+                ChildId,
+                IdentifierType.UPN,
+                upn.Trim()
+            )
+        );
     }
 }
