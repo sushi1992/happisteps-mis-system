@@ -1,4 +1,8 @@
 using HappiSteps.Infrastructure.Persistence;
+using HappiSteps.Domain.Children;
+using HappiSteps.Domain.Common;
+using HappiSteps.Infrastructure.Persistence.Repositories;
+
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +15,9 @@ builder.Services.AddDbContext<HappiStepsDbContext>(options =>
 {
     options.UseSqlite("Data Source=happisteps.db");
 });
+
+builder.Services.AddScoped<IChildRepository, ChildRepository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddControllers();
 
