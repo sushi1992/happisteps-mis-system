@@ -1,0 +1,83 @@
+# =========================
+# .NET / C#
+# =========================
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa]nyCPU/
+
+# =========================
+# ASP.NET Core
+# =========================
+appsettings.Development.json
+appsettings.Local.json
+
+# IIS / hosting
+*.vspscc
+*.vssscc
+*.pidb
+*.log
+
+# =========================
+# Entity Framework
+# =========================
+**/Migrations/*
+!**/Migrations/README.md
+
+# =========================
+# SQLite (local dev only)
+# =========================
+*.db
+*.db-shm
+*.db-wal
+
+# =========================
+# Visual Studio / VS Code
+# =========================
+.vs/
+.vscode/*
+!.vscode/settings.json
+!.vscode/launch.json
+!.vscode/tasks.json
+!.vscode/extensions.json
+
+# =========================
+# macOS
+# =========================
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# =========================
+# Rider / JetBrains
+# =========================
+.idea/
+*.sln.iml
+
+# =========================
+# Logs
+# =========================
+logs/
+*.log
+
+# =========================
+# Node / Frontend (future-proof)
+# =========================
+node_modules/
+dist/
+build/
+
+# =========================
+# Secrets
+# =========================
+*.env
+.env.*
