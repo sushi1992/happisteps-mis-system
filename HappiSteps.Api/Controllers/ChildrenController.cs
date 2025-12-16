@@ -2,6 +2,7 @@ using HappiSteps.Contracts.Children;
 using HappiSteps.Domain.Children;
 using HappiSteps.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace HappiSteps.Api.Controllers;
 
@@ -19,7 +20,7 @@ public class ChildrenController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create(CreateChildRequest request)
     {
-        var child = new Child(
+        var child = Child.Create(
             request.OrganisationId,
             request.FirstName,
             request.LastName,
@@ -39,12 +40,12 @@ public class ChildrenController : ControllerBase
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetById(Guid id)
     {
-        var child = await _db.Children.FindAsync(id);
+        var child = await _db.Children
+            .Include(c => c.Identifiers)
+            .FirstOrDefaultAsync(c => c.ChildId == id);
 
         if (child is null)
-        {
             return NotFound();
-        }
 
         return Ok(child);
     }

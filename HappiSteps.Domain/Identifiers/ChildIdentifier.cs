@@ -2,14 +2,19 @@ namespace HappiSteps.Domain.Identifiers;
 
 public class ChildIdentifier
 {
-    public IdentifierType Type { get; }
-    public string Value { get; }
-    public DateTime AssignedAt { get; }
+    private ChildIdentifier() { }
 
-    internal ChildIdentifier(IdentifierType type, string value)
+    public IdentifierType Type { get; private set; }
+    public string Value { get; private set; } = null!;
+    public DateTime AssignedAt { get; private set; }
+
+    internal static ChildIdentifier CreateUpn(string value)
     {
-        Type = type;
-        Value = value;
-        AssignedAt = DateTime.UtcNow;
+        return new ChildIdentifier
+        {
+            Type = IdentifierType.UPN,
+            Value = value.Trim(),
+            AssignedAt = DateTime.UtcNow
+        };
     }
 }
