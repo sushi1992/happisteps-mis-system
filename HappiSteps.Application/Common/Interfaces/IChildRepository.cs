@@ -1,4 +1,6 @@
-namespace HappiSteps.Domain.Children;
+using HappiSteps.Domain.Children;
+
+namespace HappiSteps.Application.Common.Interfaces;
 
 public interface IChildRepository
 {

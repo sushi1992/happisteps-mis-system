@@ -18,6 +18,7 @@
     <ProjectReference Include="..\HappiSteps.Domain\HappiSteps.Domain.csproj" />
     <ProjectReference Include="..\HappiSteps.Infrastructure\HappiSteps.Infrastructure.csproj" />
     <ProjectReference Include="..\HappiSteps.Contracts\HappiSteps.Contracts.csproj" />
+    <ProjectReference Include="..\HappiSteps.Application\HappiSteps.Application.csproj" />
   </ItemGroup>
 
 </Project>

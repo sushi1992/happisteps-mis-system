@@ -1,4 +1,5 @@
 using HappiSteps.Domain.Children;
+using HappiSteps.Application.Common.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace HappiSteps.Infrastructure.Persistence.Repositories;
@@ -19,7 +20,8 @@ public sealed class ChildRepository : IChildRepository
 
     public async Task<Child?> GetByIdAsync(Guid childId, CancellationToken cancellationToken = default)
     {
-        return await _dbContext.Children
-            .FirstOrDefaultAsync(c => c.ChildId == childId, cancellationToken);
+   return await _dbContext.Children
+            .Include(c => c.Identifiers)
+            .FirstOrDefaultAsync(c => c.ChildId == childId);
     }
 }

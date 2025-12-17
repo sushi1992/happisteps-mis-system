@@ -1,9 +1,11 @@
+using HappiSteps.Application.Children.CreateChild;
+using HappiSteps.Application.Children.GetChildById;
 using HappiSteps.Infrastructure.Persistence;
-using HappiSteps.Domain.Children;
 using HappiSteps.Domain.Common;
 using HappiSteps.Infrastructure.Persistence.Repositories;
 
 using Microsoft.EntityFrameworkCore;
+using HappiSteps.Application.Common.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +19,10 @@ builder.Services.AddDbContext<HappiStepsDbContext>(options =>
 });
 
 builder.Services.AddScoped<IChildRepository, ChildRepository>();
+
+builder.Services.AddScoped<CreateChildHandler>();
+builder.Services.AddScoped<GetChildByIdHandler>();
+
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddControllers();
