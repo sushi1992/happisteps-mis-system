@@ -1,5 +1,5 @@
 using HappiSteps.Application.Common.Interfaces;
-using HappiSteps.Domain.Children;
+using HappiSteps.Contracts.Children;
 
 namespace HappiSteps.Application.Children.GetChildById;
 
@@ -12,8 +12,27 @@ public sealed class GetChildByIdHandler
         _repository = repository;
     }
 
-    public async Task<Child?> Handle(GetChildByIdQuery query)
+    public async Task<ChildResponse?> Handle(GetChildByIdQuery query)
     {
-        return await _repository.GetByIdAsync(query.ChildId);
+        var child = await _repository.GetByIdAsync(query.ChildId);
+
+        if (child is null)
+            return null;
+
+        return new ChildResponse(
+            child.ChildId,
+            child.OrganisationId,
+            child.FirstName,
+            child.LastName,
+            child.DateOfBirth,
+            child.Status.ToString(),
+            child.Identifiers.Select(i =>
+                new ChildIdentifierResponse(
+                    i.Type.ToString(),
+                    i.Value,
+                    i.AssignedAt
+                )
+            ).ToList()
+        );
     }
 }

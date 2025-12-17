@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\HappiSteps.Domain\HappiSteps.Domain.csproj" />
+    <ProjectReference Include="..\HappiSteps.Contracts\HappiSteps.Contracts.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
