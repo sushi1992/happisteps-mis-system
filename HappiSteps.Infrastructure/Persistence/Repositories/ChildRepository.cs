@@ -20,8 +20,9 @@ public sealed class ChildRepository : IChildRepository
 
     public async Task<Child?> GetByIdAsync(Guid childId, CancellationToken cancellationToken = default)
     {
-   return await _dbContext.Children
+        return await _dbContext.Children
+            .AsNoTracking()
             .Include(c => c.Identifiers)
-            .FirstOrDefaultAsync(c => c.ChildId == childId);
+            .FirstOrDefaultAsync(c => c.ChildId == childId, cancellationToken);
     }
 }
