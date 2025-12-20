@@ -14,14 +14,14 @@ public class ChildrenController : ControllerBase
         CreateChildRequest request,
         [FromServices] CreateChildHandler handler)
     {
-        var result = await handler.Handle(new CreateChildCommand(
+        var child = await handler.Handle(new CreateChildCommand(
             request.OrganisationId,
             request.FirstName,
             request.LastName,
             request.DateOfBirth
         ));
 
-        return CreatedAtAction(nameof(GetById), new { id = result.ChildId }, result.ChildId);
+        return CreatedAtAction(nameof(GetById), new { id = child.ChildId }, child);
     }
 
     [HttpGet("{id:guid}")]

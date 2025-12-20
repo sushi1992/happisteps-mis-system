@@ -1,4 +1,5 @@
 using HappiSteps.Domain.Children;
+using HappiSteps.Contracts.Children;
 using HappiSteps.Application.Common.Interfaces;
 
 namespace HappiSteps.Application.Children.CreateChild;
@@ -12,7 +13,7 @@ public class CreateChildHandler
         _children = children;
     }
 
-    public async Task<CreateChildResult> Handle(CreateChildCommand command)
+    public async Task<ChildResponse> Handle(CreateChildCommand command)
     {
         var child = Child.Create(
             command.OrganisationId,
@@ -23,6 +24,14 @@ public class CreateChildHandler
 
         await _children.AddAsync(child);
 
-        return new CreateChildResult(child.ChildId);
+        return new ChildResponse(
+            child.ChildId,
+            child.OrganisationId,
+            child.FirstName,
+            child.LastName,
+            child.DateOfBirth,
+            child.Status.ToString(),
+            []
+        );
     }
 }
