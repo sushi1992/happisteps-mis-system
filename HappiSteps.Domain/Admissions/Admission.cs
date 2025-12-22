@@ -55,6 +55,9 @@ public class Admission
     {
         if (Status != AdmissionStatus.OnRoll)
             throw new InvalidOperationException("Only on-roll admissions can be closed.");
+        if (leavingDate < AdmissionDate)
+            throw new InvalidOperationException(
+                "Leaving date cannot be before admission date.");
 
         LeavingDate = leavingDate;
         Status = AdmissionStatus.Left;

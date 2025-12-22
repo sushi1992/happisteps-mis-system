@@ -1,5 +1,6 @@
 using HappiSteps.Application.Admissions.ApplyForAdmission;
 using HappiSteps.Application.Admissions.ConfirmAdmission;
+using HappiSteps.Application.Admissions.LeaveAdmission;
 using HappiSteps.Contracts.Admissions;
 using Microsoft.AspNetCore.Mvc;
 
@@ -35,6 +36,18 @@ public sealed class AdmissionsController : ControllerBase
                 admissionId,
                 request.OnRollDate,
                 request.Upn));
+
+        return NoContent();
+    }
+
+    [HttpPost("{admissionId:guid}/leave")]
+    public async Task<IActionResult> Leave(
+        Guid admissionId,
+        LeaveAdmissionRequest request,
+        [FromServices] LeaveAdmissionHandler handler)
+    {
+        await handler.Handle(
+            new LeaveAdmissionCommand(admissionId, request.LeavingDate));
 
         return NoContent();
     }

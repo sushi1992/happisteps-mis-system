@@ -6,6 +6,8 @@ using HappiSteps.Infrastructure.Persistence.Repositories;
 
 using Microsoft.EntityFrameworkCore;
 using HappiSteps.Application.Common.Interfaces;
+using HappiSteps.Application.Admissions.ConfirmAdmission;
+using HappiSteps.Application.Admissions.LeaveAdmission;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +25,8 @@ builder.Services.AddScoped<IAdmissionRepository, AdmissionRepository>();
 
 builder.Services.AddScoped<CreateChildHandler>();
 builder.Services.AddScoped<GetChildByIdHandler>();
+builder.Services.AddScoped<ConfirmAdmissionHandler>();
+builder.Services.AddScoped<LeaveAdmissionHandler>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
