@@ -1,4 +1,5 @@
 using HappiSteps.Application.Admissions.ApplyForAdmission;
+using HappiSteps.Application.Admissions.ConfirmAdmission;
 using HappiSteps.Contracts.Admissions;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,5 +22,20 @@ public sealed class AdmissionsController : ControllerBase
                 request.AdmissionDate));
 
         return Ok(new { AdmissionId = admissionId });
+    }
+
+    [HttpPost("{admissionId:guid}/confirm")]
+    public async Task<IActionResult> ConfirmAdmission(
+        Guid admissionId,
+        ConfirmAdmissionRequest request,
+        [FromServices] ConfirmAdmissionHandler handler)
+    {
+        await handler.Handle(
+            new ConfirmAdmissionCommand(
+                admissionId,
+                request.OnRollDate,
+                request.Upn));
+
+        return NoContent();
     }
 }

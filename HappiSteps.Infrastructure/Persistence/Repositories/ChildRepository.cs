@@ -25,4 +25,13 @@ public sealed class ChildRepository : IChildRepository
             .Include(c => c.Identifiers)
             .FirstOrDefaultAsync(c => c.ChildId == childId, cancellationToken);
     }
+
+    public async Task<Child?> GetTrackedByIdAsync(Guid childId,CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Children
+            .Include(c => c.Identifiers)
+            .FirstOrDefaultAsync(
+                c => c.ChildId == childId,
+                cancellationToken);
+    }
 }
