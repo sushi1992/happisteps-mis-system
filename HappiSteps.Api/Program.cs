@@ -19,6 +19,7 @@ builder.Services.AddDbContext<HappiStepsDbContext>(options =>
 });
 
 builder.Services.AddScoped<IChildRepository, ChildRepository>();
+builder.Services.AddScoped<IAdmissionRepository, AdmissionRepository>();
 
 builder.Services.AddScoped<CreateChildHandler>();
 builder.Services.AddScoped<GetChildByIdHandler>();

@@ -1,4 +1,5 @@
 using HappiSteps.Domain.Children;
+using HappiSteps.Domain.Common;
 using HappiSteps.Contracts.Children;
 using HappiSteps.Application.Common.Interfaces;
 
@@ -7,10 +8,12 @@ namespace HappiSteps.Application.Children.CreateChild;
 public class CreateChildHandler
 {
     private readonly IChildRepository _children;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public CreateChildHandler(IChildRepository children)
+    public CreateChildHandler(IChildRepository children, IUnitOfWork unitOfWork)
     {
         _children = children;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<ChildResponse> Handle(CreateChildCommand command)
@@ -23,6 +26,7 @@ public class CreateChildHandler
         );
 
         await _children.AddAsync(child);
+        await _unitOfWork.SaveChangesAsync();
 
         return new ChildResponse(
             child.ChildId,

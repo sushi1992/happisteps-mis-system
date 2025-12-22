@@ -19,13 +19,13 @@ internal class ChildConfiguration : IEntityTypeConfiguration<Child>
         builder.Property(c => c.Status).IsRequired();
 
         // Map private backing field
-        builder
-            .HasMany<ChildIdentifier>("_identifiers")
-            .WithOne()
-            .HasForeignKey("ChildId")
-            .OnDelete(DeleteBehavior.Cascade);
+        builder.HasMany(c => c.Identifiers)
+               .WithOne()
+               .HasForeignKey(ci => ci.ChildId)
+               .OnDelete(DeleteBehavior.Cascade);
 
-        builder.Navigation("_identifiers")
+        // Tell EF the navigation is backed by the field
+        builder.Navigation(c => c.Identifiers)
                .UsePropertyAccessMode(PropertyAccessMode.Field);
     }
 }
