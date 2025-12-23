@@ -34,7 +34,6 @@ public sealed class AdmissionsController : ControllerBase
         await handler.Handle(
             new ConfirmAdmissionCommand(
                 admissionId,
-                request.OrganisationId,
                 request.OnRollDate,
                 request.Upn));
 

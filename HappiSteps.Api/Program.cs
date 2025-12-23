@@ -1,8 +1,12 @@
 using HappiSteps.Application.Children.CreateChild;
 using HappiSteps.Application.Children.GetChildById;
+using HappiSteps.Api.Auth;
 using HappiSteps.Infrastructure.Persistence;
 using HappiSteps.Domain.Common;
 using HappiSteps.Infrastructure.Persistence.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 using Microsoft.EntityFrameworkCore;
 using HappiSteps.Application.Common.Interfaces;
@@ -17,10 +21,30 @@ var builder = WebApplication.CreateBuilder(args);
 // Services
 // =======================
 
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes("super-secret-dev-key-change-me")),
+            ValidateLifetime = true
+        };
+    });
+
+builder.Services.AddAuthorization();
+
 builder.Services.AddDbContext<HappiStepsDbContext>(options =>
 {
     options.UseSqlite("Data Source=happisteps.db");
 });
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IOrganisationContext, OrganisationContext>();
 
 builder.Services.AddScoped<IChildRepository, ChildRepository>();
 builder.Services.AddScoped<IAdmissionRepository, AdmissionRepository>();
@@ -49,6 +73,9 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseHttpsRedirection();
 app.MapControllers();

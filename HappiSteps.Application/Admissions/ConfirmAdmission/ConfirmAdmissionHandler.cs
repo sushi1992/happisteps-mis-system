@@ -10,15 +10,19 @@ public sealed class ConfirmAdmissionHandler
     private readonly IAdmissionRepository _admissions;
     private readonly IChildRepository _children;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IOrganisationContext _organisation;
+
 
     public ConfirmAdmissionHandler(
         IAdmissionRepository admissions,
         IChildRepository children,
-        IUnitOfWork unitOfWork)
-    {
+        IUnitOfWork unitOfWork,
+        IOrganisationContext organisation)
+    {        
         _admissions = admissions;
         _children = children;
         _unitOfWork = unitOfWork;
+        _organisation = organisation;
     }
 
     public async Task Handle(
@@ -33,7 +37,7 @@ public sealed class ConfirmAdmissionHandler
         if (admission is null)
             throw new InvalidOperationException("Admission not found.");
 
-        if (admission.OrganisationId != command.OrganisationId)
+        if (admission.OrganisationId != _organisation.OrganisationId)
             throw new InvalidOperationException("Organisation mismatch.");
 
         // 2️⃣ Load child (tracked)
