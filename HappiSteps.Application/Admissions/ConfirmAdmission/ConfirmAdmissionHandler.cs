@@ -33,6 +33,9 @@ public sealed class ConfirmAdmissionHandler
         if (admission is null)
             throw new InvalidOperationException("Admission not found.");
 
+        if (admission.OrganisationId != command.OrganisationId)
+            throw new InvalidOperationException("Organisation mismatch.");
+
         // 2️⃣ Load child (tracked)
         var child = await _children.GetTrackedByIdAsync(
             admission.ChildId,

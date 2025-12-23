@@ -31,6 +31,9 @@ public sealed class LeaveAdmissionHandler
         if (admission is null)
             throw new InvalidOperationException("Admission not found.");
 
+        if (admission.OrganisationId != command.OrganisationId)
+            throw new InvalidOperationException("Organisation mismatch.");
+
         // We are going to mutate the child, so tracked fetch.
         var child = await _children.GetTrackedByIdAsync(
             admission.ChildId,

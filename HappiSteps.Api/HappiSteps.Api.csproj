@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\HappiSteps.ReadModel\HappiSteps.ReadModel.csproj" />
     <ProjectReference Include="..\HappiSteps.Domain\HappiSteps.Domain.csproj" />
     <ProjectReference Include="..\HappiSteps.Infrastructure\HappiSteps.Infrastructure.csproj" />
     <ProjectReference Include="..\HappiSteps.Contracts\HappiSteps.Contracts.csproj" />

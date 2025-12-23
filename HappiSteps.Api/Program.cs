@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using HappiSteps.Application.Common.Interfaces;
 using HappiSteps.Application.Admissions.ConfirmAdmission;
 using HappiSteps.Application.Admissions.LeaveAdmission;
+using HappiSteps.ReadModel.Admissions.GetOnRollRegister;
+using HappiSteps.ReadModel.Admissions.GetAdmissionHistoryForChild;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +29,8 @@ builder.Services.AddScoped<CreateChildHandler>();
 builder.Services.AddScoped<GetChildByIdHandler>();
 builder.Services.AddScoped<ConfirmAdmissionHandler>();
 builder.Services.AddScoped<LeaveAdmissionHandler>();
+builder.Services.AddScoped<GetOnRollRegisterHandler>();
+builder.Services.AddScoped<GetAdmissionHistoryForChildHandler>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 

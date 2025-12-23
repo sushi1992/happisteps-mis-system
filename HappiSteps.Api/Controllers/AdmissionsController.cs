@@ -34,6 +34,7 @@ public sealed class AdmissionsController : ControllerBase
         await handler.Handle(
             new ConfirmAdmissionCommand(
                 admissionId,
+                request.OrganisationId,
                 request.OnRollDate,
                 request.Upn));
 
@@ -47,7 +48,7 @@ public sealed class AdmissionsController : ControllerBase
         [FromServices] LeaveAdmissionHandler handler)
     {
         await handler.Handle(
-            new LeaveAdmissionCommand(admissionId, request.LeavingDate));
+            new LeaveAdmissionCommand(admissionId, request.OrganisationId, request.LeavingDate));
 
         return NoContent();
     }
