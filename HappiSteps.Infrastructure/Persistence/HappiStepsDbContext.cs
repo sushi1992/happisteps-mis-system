@@ -18,9 +18,9 @@ public class HappiStepsDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-       // Automatically apply all IEntityTypeConfiguration<T>
-       modelBuilder.ApplyConfigurationsFromAssembly(
-            typeof(HappiStepsDbContext).Assembly
-       );
+        // Automatically apply all IEntityTypeConfiguration<T>
+        modelBuilder.ApplyConfigurationsFromAssembly(
+             typeof(HappiStepsDbContext).Assembly
+        );
     }
 }

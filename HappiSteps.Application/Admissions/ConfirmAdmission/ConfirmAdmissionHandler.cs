@@ -18,7 +18,7 @@ public sealed class ConfirmAdmissionHandler
         IChildRepository children,
         IUnitOfWork unitOfWork,
         IOrganisationContext organisation)
-    {        
+    {
         _admissions = admissions;
         _children = children;
         _unitOfWork = unitOfWork;
