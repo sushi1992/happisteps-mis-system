@@ -4,5 +4,6 @@ public enum ChildStatus
 {
     Applied,
     OnRoll,
-    Left
+    Left,
+    Archived
 }

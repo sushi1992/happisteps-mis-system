@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using HappiSteps.Application.Common.Interfaces;
 using HappiSteps.Application.Admissions.ConfirmAdmission;
 using HappiSteps.Application.Admissions.LeaveAdmission;
+using HappiSteps.Application.Children.ArchiveChild;
 using HappiSteps.ReadModel.Admissions.GetOnRollRegister;
 using HappiSteps.ReadModel.Admissions.GetAdmissionHistoryForChild;
 using HappiSteps.ReadModel.Children.GetChildrenForOrganisation;
@@ -59,6 +60,7 @@ builder.Services.AddScoped<GetOnRollRegisterHandler>();
 builder.Services.AddScoped<GetAdmissionHistoryForChildHandler>();
 builder.Services.AddScoped<GetChildrenForOrganisationHandler>();
 builder.Services.AddScoped<GetChildDetailsHandler>();
+builder.Services.AddScoped<ArchiveChildHandler>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 

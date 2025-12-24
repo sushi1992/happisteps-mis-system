@@ -51,6 +51,15 @@ public class Child
         Status = newStatus;
     }
 
+    public void Archive()
+    {
+        if (Status == ChildStatus.OnRoll)
+            throw new InvalidOperationException(
+                "Cannot archive a child who is currently on roll.");
+
+        Status = ChildStatus.Archived;
+    }
+
     public void AssignUpn(string upn)
     {
         if (string.IsNullOrWhiteSpace(upn))

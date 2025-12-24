@@ -1,9 +1,11 @@
 using HappiSteps.Application.Children.CreateChild;
-using HappiSteps.Application.Children.GetChildById;
 using HappiSteps.Contracts.Children;
 using HappiSteps.ReadModel.Children.GetChildrenForOrganisation;
 using HappiSteps.ReadModel.Children.GetChildDetails;
+using HappiSteps.Application.Children.ArchiveChild;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using HappiSteps.Contracts.Auth;
 
 namespace HappiSteps.Api.Controllers;
 
@@ -11,6 +13,7 @@ namespace HappiSteps.Api.Controllers;
 [Route("api/children")]
 public class ChildrenController : ControllerBase
 {
+    [Authorize(Roles = Roles.Admin)]
     [HttpPost]
     public async Task<IActionResult> Create(
         CreateChildRequest request,
@@ -26,6 +29,7 @@ public class ChildrenController : ControllerBase
         return CreatedAtAction(nameof(GetChildDetails), new { id = child.ChildId }, child);
     }
 
+    [Authorize]
     [HttpGet]
     public async Task<IActionResult> GetChildren(
         [FromServices] GetChildrenForOrganisationHandler handler)
@@ -48,5 +52,17 @@ public class ChildrenController : ControllerBase
             return NotFound();
 
         return Ok(result);
+    }
+
+    [Authorize(Roles = Roles.Admin)]
+    [HttpPost("{id:guid}/archive")]
+    public async Task<IActionResult> ArchiveChild(
+        Guid id,
+        [FromServices] ArchiveChildHandler handler)
+    {
+        await handler.Handle(
+            new ArchiveChildCommand(id));
+
+        return NoContent();
     }
 }

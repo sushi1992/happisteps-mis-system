@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using HappiSteps.Contracts.Auth;
 
 namespace HappiSteps.Api.Auth;
 
@@ -14,7 +15,8 @@ public static class DevTokenIssuer
         var claims = new[]
         {
             new Claim("userId", userId.ToString()),
-            new Claim("organisationId", organisationId.ToString())
+            new Claim("organisationId", organisationId.ToString()),
+            new Claim(ClaimTypes.Role, Roles.Admin)
         };
 
         var key = new SymmetricSecurityKey(

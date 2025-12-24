@@ -1,5 +1,6 @@
 using HappiSteps.Application.Common.Interfaces;
 using HappiSteps.Contracts.Children;
+using HappiSteps.Domain.Children;
 using HappiSteps.Domain.Admissions;
 using HappiSteps.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -25,7 +26,9 @@ public sealed class GetChildrenForOrganisationHandler
     {
         return await _dbContext.Children
             .AsNoTracking()
-            .Where(c => c.OrganisationId == _organisation.OrganisationId)
+            .Where(c =>
+                c.OrganisationId == _organisation.OrganisationId &&
+                c.Status != ChildStatus.Archived)
             .Select(c => new
             {
                 Child = c,
