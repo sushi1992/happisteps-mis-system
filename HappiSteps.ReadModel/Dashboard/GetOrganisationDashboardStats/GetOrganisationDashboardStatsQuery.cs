@@ -1,0 +1,3 @@
+namespace HappiSteps.ReadModel.Dashboard.GetOrganisationDashboardStats;
+
+public sealed record GetOrganisationDashboardStatsQuery;
