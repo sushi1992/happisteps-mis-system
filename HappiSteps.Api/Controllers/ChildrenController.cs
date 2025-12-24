@@ -1,6 +1,7 @@
 using HappiSteps.Application.Children.CreateChild;
 using HappiSteps.Application.Children.GetChildById;
 using HappiSteps.Contracts.Children;
+using HappiSteps.ReadModel.Children.GetChildrenForOrganisation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HappiSteps.Api.Controllers;
@@ -35,5 +36,15 @@ public class ChildrenController : ControllerBase
             return NotFound();
 
         return Ok(child);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetChildren(
+        [FromServices] GetChildrenForOrganisationHandler handler)
+    {
+        var result = await handler.Handle(
+            new GetChildrenForOrganisationQuery());
+
+        return Ok(result);
     }
 }
