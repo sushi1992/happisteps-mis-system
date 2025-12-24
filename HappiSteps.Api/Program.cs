@@ -4,6 +4,8 @@ using HappiSteps.Api.Auth;
 using HappiSteps.Infrastructure.Persistence;
 using HappiSteps.Domain.Common;
 using HappiSteps.Infrastructure.Persistence.Repositories;
+using HappiSteps.Infrastructure.Audit;
+using HappiSteps.Infrastructure.Auth;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -51,6 +53,8 @@ builder.Services.AddScoped<IOrganisationContext, OrganisationContext>();
 
 builder.Services.AddScoped<IChildRepository, ChildRepository>();
 builder.Services.AddScoped<IAdmissionRepository, AdmissionRepository>();
+builder.Services.AddScoped<IAuditLogger, AuditLogger>();
+builder.Services.AddScoped<IUserContext, UserContext>();
 
 builder.Services.AddScoped<CreateChildHandler>();
 builder.Services.AddScoped<GetChildByIdHandler>();

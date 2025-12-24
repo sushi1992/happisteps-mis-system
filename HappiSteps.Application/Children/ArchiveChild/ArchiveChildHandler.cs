@@ -8,13 +8,16 @@ public sealed class ArchiveChildHandler
 {
     private readonly IChildRepository _children;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IAuditLogger _audit;
 
     public ArchiveChildHandler(
         IChildRepository children,
-        IUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork,
+        IAuditLogger audit)
     {
         _children = children;
         _unitOfWork = unitOfWork;
+        _audit = audit;
     }
 
     public async Task Handle(
@@ -29,6 +32,16 @@ public sealed class ArchiveChildHandler
             throw new InvalidOperationException("Child not found.");
 
         child.Archive();
+
+        await _audit.LogAsync(
+            action: "ChildArchived",
+            entityType: "Child",
+            entityId: child.ChildId,
+            metadata: new
+            {
+                PreviousStatus = "Left"
+            },
+            cancellationToken);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
