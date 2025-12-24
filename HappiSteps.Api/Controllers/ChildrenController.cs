@@ -9,6 +9,7 @@ using HappiSteps.Contracts.Auth;
 
 namespace HappiSteps.Api.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/children")]
 public class ChildrenController : ControllerBase
@@ -40,6 +41,7 @@ public class ChildrenController : ControllerBase
         return Ok(result);
     }
 
+    [Authorize]
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetChildDetails(
         Guid id,

@@ -1,5 +1,3 @@
 namespace HappiSteps.ReadModel.Admissions.GetOnRollRegister;
 
-public sealed record GetOnRollRegisterQuery(
-    Guid OrganisationId
-);
+public sealed record GetOnRollRegisterQuery;

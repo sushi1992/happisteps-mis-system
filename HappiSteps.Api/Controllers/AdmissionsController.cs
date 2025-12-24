@@ -9,6 +9,7 @@ using HappiSteps.Contracts.Auth;
 
 namespace HappiSteps.Api.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/children/{childId:guid}/admissions")]
 public sealed class AdmissionsController : ControllerBase
@@ -57,7 +58,8 @@ public sealed class AdmissionsController : ControllerBase
         return NoContent();
     }
 
-    [HttpGet("{childId:guid}/admissions/history")]
+    [Authorize]
+    [HttpGet("history")]
     public async Task<IActionResult> GetAdmissionHistory(
     Guid childId,
     [FromServices] GetAdmissionHistoryForChildHandler handler)

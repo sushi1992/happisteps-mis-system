@@ -1,3 +1,4 @@
+using HappiSteps.Application.Common.Interfaces;
 using HappiSteps.Contracts.Admissions;
 using HappiSteps.Domain.Admissions;
 using HappiSteps.Domain.Identifiers;
@@ -9,20 +10,22 @@ namespace HappiSteps.ReadModel.Admissions.GetOnRollRegister;
 public sealed class GetOnRollRegisterHandler
 {
     private readonly HappiStepsDbContext _dbContext;
+    private readonly IOrganisationContext _organisation;
 
-    public GetOnRollRegisterHandler(HappiStepsDbContext dbContext)
+    public GetOnRollRegisterHandler(HappiStepsDbContext dbContext, IOrganisationContext organisation)
     {
         _dbContext = dbContext;
+        _organisation = organisation;
     }
 
     public async Task<IReadOnlyList<OnRollRegisterItem>> Handle(
-        GetOnRollRegisterQuery query,
+        GetOnRollRegisterQuery _,
         CancellationToken cancellationToken = default)
     {
         return await _dbContext.Admissions
             .AsNoTracking()
             .Where(a =>
-                a.OrganisationId == query.OrganisationId &&
+                a.OrganisationId == _organisation.OrganisationId &&
                 a.Status == AdmissionStatus.OnRoll)
             .Join(
                 _dbContext.Children.AsNoTracking(),
