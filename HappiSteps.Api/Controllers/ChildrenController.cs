@@ -1,7 +1,6 @@
 using HappiSteps.Application.Children.CreateChild;
 using HappiSteps.Application.Children.GetChildById;
 using HappiSteps.Contracts.Children;
-using HappiSteps.ReadModel.Admissions.GetAdmissionHistoryForChild;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HappiSteps.Api.Controllers;
@@ -36,16 +35,5 @@ public class ChildrenController : ControllerBase
             return NotFound();
 
         return Ok(child);
-    }
-
-    [HttpGet("{childId:guid}/admissions/history")]
-    public async Task<IActionResult> GetAdmissionHistory(
-        Guid childId,
-        [FromServices] GetAdmissionHistoryForChildHandler handler)
-    {
-        var result = await handler.Handle(
-            new GetAdmissionHistoryForChildQuery(childId));
-
-        return Ok(result);
     }
 }

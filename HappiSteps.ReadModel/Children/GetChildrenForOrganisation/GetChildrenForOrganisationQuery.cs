@@ -1,0 +1,3 @@
+namespace HappiSteps.ReadModel.Children.GetChildrenForOrganisation;
+
+public sealed record GetChildrenForOrganisationQuery;

@@ -2,6 +2,7 @@ using HappiSteps.Application.Admissions.ApplyForAdmission;
 using HappiSteps.Application.Admissions.ConfirmAdmission;
 using HappiSteps.Application.Admissions.LeaveAdmission;
 using HappiSteps.Contracts.Admissions;
+using HappiSteps.ReadModel.Admissions.GetAdmissionHistoryForChild;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HappiSteps.Api.Controllers;
@@ -50,5 +51,16 @@ public sealed class AdmissionsController : ControllerBase
             new LeaveAdmissionCommand(admissionId, request.OrganisationId, request.LeavingDate));
 
         return NoContent();
+    }
+
+    [HttpGet("{childId:guid}/admissions/history")]
+    public async Task<IActionResult> GetAdmissionHistory(
+    Guid childId,
+    [FromServices] GetAdmissionHistoryForChildHandler handler)
+    {
+        var result = await handler.Handle(
+            new GetAdmissionHistoryForChildQuery(childId));
+
+        return Ok(result);
     }
 }
