@@ -2,6 +2,7 @@ using HappiSteps.Application.Children.CreateChild;
 using HappiSteps.Application.Children.GetChildById;
 using HappiSteps.Contracts.Children;
 using HappiSteps.ReadModel.Children.GetChildrenForOrganisation;
+using HappiSteps.ReadModel.Children.GetChildDetails;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HappiSteps.Api.Controllers;
@@ -22,20 +23,7 @@ public class ChildrenController : ControllerBase
             request.DateOfBirth
         ));
 
-        return CreatedAtAction(nameof(GetById), new { id = child.ChildId }, child);
-    }
-
-    [HttpGet("{id:guid}")]
-    public async Task<IActionResult> GetById(
-        Guid id,
-        [FromServices] GetChildByIdHandler handler)
-    {
-        var child = await handler.Handle(new GetChildByIdQuery(id));
-
-        if (child is null)
-            return NotFound();
-
-        return Ok(child);
+        return CreatedAtAction(nameof(GetChildDetails), new { id = child.ChildId }, child);
     }
 
     [HttpGet]
@@ -44,6 +32,20 @@ public class ChildrenController : ControllerBase
     {
         var result = await handler.Handle(
             new GetChildrenForOrganisationQuery());
+
+        return Ok(result);
+    }
+
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> GetChildDetails(
+        Guid id,
+        [FromServices] GetChildDetailsHandler handler)
+    {
+        var result = await handler.Handle(
+            new GetChildDetailsQuery(id));
+
+        if (result is null)
+            return NotFound();
 
         return Ok(result);
     }

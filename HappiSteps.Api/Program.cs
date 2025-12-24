@@ -15,6 +15,7 @@ using HappiSteps.Application.Admissions.LeaveAdmission;
 using HappiSteps.ReadModel.Admissions.GetOnRollRegister;
 using HappiSteps.ReadModel.Admissions.GetAdmissionHistoryForChild;
 using HappiSteps.ReadModel.Children.GetChildrenForOrganisation;
+using HappiSteps.ReadModel.Children.GetChildDetails;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -57,6 +58,7 @@ builder.Services.AddScoped<LeaveAdmissionHandler>();
 builder.Services.AddScoped<GetOnRollRegisterHandler>();
 builder.Services.AddScoped<GetAdmissionHistoryForChildHandler>();
 builder.Services.AddScoped<GetChildrenForOrganisationHandler>();
+builder.Services.AddScoped<GetChildDetailsHandler>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
