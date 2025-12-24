@@ -9,15 +9,19 @@ public sealed class LeaveAdmissionHandler
     private readonly IAdmissionRepository _admissions;
     private readonly IChildRepository _children;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IAuditLogger _audit;
+
 
     public LeaveAdmissionHandler(
         IAdmissionRepository admissions,
         IChildRepository children,
-        IUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork,
+        IAuditLogger audit)
     {
         _admissions = admissions;
         _children = children;
         _unitOfWork = unitOfWork;
+        _audit = audit;
     }
 
     public async Task Handle(
@@ -44,6 +48,15 @@ public sealed class LeaveAdmissionHandler
 
         admission.Leave(command.LeavingDate);
         child.ChangeStatus(ChildStatus.Left);
+        await _audit.LogAsync(
+            action: "AdmissionLeft",
+            entityType: "Admission",
+            entityId: admission.AdmissionId,
+            metadata: new
+            {
+                command.LeavingDate
+            },
+            cancellationToken);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }

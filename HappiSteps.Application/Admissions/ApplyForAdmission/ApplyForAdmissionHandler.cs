@@ -8,11 +8,13 @@ public sealed class ApplyForAdmissionHandler
 {
     private readonly IAdmissionRepository _admissions;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IAuditLogger _audit;
 
-    public ApplyForAdmissionHandler(IAdmissionRepository admissions, IUnitOfWork unitOfWork)
+    public ApplyForAdmissionHandler(IAdmissionRepository admissions, IUnitOfWork unitOfWork, IAuditLogger audit)
     {
         _admissions = admissions;
         _unitOfWork = unitOfWork;
+        _audit = audit;
     }
 
     public async Task<Guid> Handle(
@@ -37,6 +39,15 @@ public sealed class ApplyForAdmissionHandler
             command.AdmissionDate);
 
         await _admissions.AddAsync(admission, cancellationToken);
+        await _audit.LogAsync(
+            action: "AdmissionApplied",
+            entityType: "Admission",
+            entityId: admission.AdmissionId,
+            metadata: new
+            {
+                admission.AdmissionDate
+            },
+            cancellationToken);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 

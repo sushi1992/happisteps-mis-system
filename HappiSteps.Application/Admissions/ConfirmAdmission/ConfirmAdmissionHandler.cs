@@ -11,18 +11,21 @@ public sealed class ConfirmAdmissionHandler
     private readonly IChildRepository _children;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IOrganisationContext _organisation;
+    private readonly IAuditLogger _audit;
 
 
     public ConfirmAdmissionHandler(
         IAdmissionRepository admissions,
         IChildRepository children,
         IUnitOfWork unitOfWork,
-        IOrganisationContext organisation)
+        IOrganisationContext organisation,
+        IAuditLogger audit)
     {
         _admissions = admissions;
         _children = children;
         _unitOfWork = unitOfWork;
         _organisation = organisation;
+        _audit = audit;
     }
 
     public async Task Handle(
@@ -59,6 +62,17 @@ public sealed class ConfirmAdmissionHandler
 
         // 5️⃣ Update child status
         child.ChangeStatus(ChildStatus.OnRoll);
+
+        await _audit.LogAsync(
+            action: "AdmissionConfirmed",
+            entityType: "Admission",
+            entityId: admission.AdmissionId,
+            metadata: new
+            {
+                command.OnRollDate,
+                command.Upn
+            },
+            cancellationToken);
 
         // 6️⃣ Commit as one unit
         await _unitOfWork.SaveChangesAsync(cancellationToken);
