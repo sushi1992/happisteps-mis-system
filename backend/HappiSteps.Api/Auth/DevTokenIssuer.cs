@@ -6,21 +6,29 @@ using HappiSteps.Contracts.Auth;
 
 namespace HappiSteps.Api.Auth;
 
-public static class DevTokenIssuer
+public sealed class DevTokenIssuer
 {
-    public static string IssueToken(
+    private readonly string _signingKey;
+
+    public DevTokenIssuer(IConfiguration config)
+    {
+        _signingKey = config["Jwt:SigningKey"]
+            ?? throw new InvalidOperationException("JWT signing key not configured");
+    }
+
+    public string IssueToken(
         Guid userId,
         Guid organisationId)
     {
         var claims = new[]
         {
-            new Claim("userId", userId.ToString()),
+            new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()),
             new Claim("organisationId", organisationId.ToString()),
             new Claim(ClaimTypes.Role, Roles.Admin)
         };
 
         var key = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes("super-secret-dev-key-change-me"));
+            Encoding.UTF8.GetBytes(_signingKey));
 
         var creds = new SigningCredentials(
             key, SecurityAlgorithms.HmacSha256);

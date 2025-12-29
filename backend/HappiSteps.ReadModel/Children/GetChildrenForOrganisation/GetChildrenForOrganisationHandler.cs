@@ -1,7 +1,7 @@
 using HappiSteps.Application.Common.Interfaces;
 using HappiSteps.Contracts.Children;
-using HappiSteps.Domain.Children;
 using HappiSteps.Domain.Admissions;
+using HappiSteps.Domain.Children;
 using HappiSteps.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,33 +24,46 @@ public sealed class GetChildrenForOrganisationHandler
         GetChildrenForOrganisationQuery _,
         CancellationToken cancellationToken = default)
     {
-        return await _dbContext.Children
+        // -----------------------------
+        // Phase 1: Database query only
+        // -----------------------------
+        var rows = await _dbContext.Children
             .AsNoTracking()
             .Where(c =>
                 c.OrganisationId == _organisation.OrganisationId &&
                 c.Status != ChildStatus.Archived)
             .Select(c => new
             {
-                Child = c,
-                OnRollAdmission = _dbContext.Admissions
+                c.ChildId,
+                c.FirstName,
+                c.LastName,
+                c.DateOfBirth,
+                c.Status,
+
+                OnRollAdmissionDate = _dbContext.Admissions
                     .Where(a =>
                         a.ChildId == c.ChildId &&
                         a.Status == AdmissionStatus.OnRoll)
                     .OrderByDescending(a => a.AdmissionDate)
+                    .Select(a => (DateOnly?)a.AdmissionDate)
                     .FirstOrDefault()
             })
+            .ToListAsync(cancellationToken);
+
+        // -----------------------------
+        // Phase 2: Shape + order in memory
+        // -----------------------------
+        return rows
             .Select(x => new ChildListItem(
-                x.Child.ChildId,
-                x.Child.FirstName,
-                x.Child.LastName,
-                x.Child.DateOfBirth,
-                x.Child.Status.ToString(),
-                x.OnRollAdmission != null
-                    ? x.OnRollAdmission.AdmissionDate
-                    : null
+                x.ChildId,
+                x.FirstName,
+                x.LastName,
+                x.DateOfBirth,
+                x.Status.ToString(),
+                x.OnRollAdmissionDate
             ))
             .OrderBy(x => x.LastName)
             .ThenBy(x => x.FirstName)
-            .ToListAsync(cancellationToken);
+            .ToList();
     }
 }

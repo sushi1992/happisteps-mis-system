@@ -27,6 +27,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Services
 // =======================
 
+var jwtSigningKey = builder.Configuration["Jwt:SigningKey"]
+    ?? throw new InvalidOperationException("JWT signing key not configured");
+
+builder.Services.AddSingleton<DevTokenIssuer>();
+
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -37,7 +42,7 @@ builder.Services
             ValidateAudience = false,
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes("super-secret-dev-key-change-me")),
+                Encoding.UTF8.GetBytes(jwtSigningKey)),
             ValidateLifetime = true
         };
     });
@@ -75,6 +80,17 @@ builder.Services.AddControllers();
 // Built-in OpenAPI (.NET 9)
 builder.Services.AddOpenApi();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("DevCors", policy =>
+    {
+        policy
+            .WithOrigins("http://localhost:5173")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 var app = builder.Build();
 
 // =======================
@@ -85,6 +101,8 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
+
+app.UseCors("DevCors");
 
 app.UseAuthentication();
 app.UseAuthorization();
