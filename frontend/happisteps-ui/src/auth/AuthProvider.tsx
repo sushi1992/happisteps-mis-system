@@ -12,14 +12,26 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } else {
       localStorage.removeItem("auth.token")
     }
+
     setTokenState(token)
   }
 
-  const ready = true
+  const logout = () => {
+    localStorage.removeItem("auth.token")
+    setTokenState(null)
+  }
 
   return (
-    <AuthContext.Provider value={{ token, setToken, ready }}>
+    <AuthContext.Provider
+      value={{
+        token,
+        setToken,
+        logout,
+        ready: true // ✅ always ready
+      }}
+    >
       {children}
     </AuthContext.Provider>
   )
 }
+
