@@ -7,3 +7,5 @@ export const msal = new PublicClientApplication({
     redirectUri: "http://localhost:5173"
   }
 })
+
+export const msalReady = msal.initialize()

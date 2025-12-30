@@ -6,14 +6,14 @@ export function Login() {
   const { setToken } = useContext(AuthContext)
 
   const handleMicrosoftLogin = async () => {
-    const code = await loginWithMicrosoft()
+    const idToken = await loginWithMicrosoft()
 
     const res = await fetch(
       "http://localhost:5209/api/auth/microsoft/exchange",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code })
+        body: JSON.stringify({ idToken })
       }
     )
 

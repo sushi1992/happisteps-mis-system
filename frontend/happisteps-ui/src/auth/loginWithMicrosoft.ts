@@ -1,12 +1,15 @@
-import { msal } from "./msal"
+import { msal, msalReady } from "./msal"
 
 export async function loginWithMicrosoft(): Promise<string> {
+  await msalReady
+
   const result = await msal.loginPopup({
     scopes: ["openid", "profile", "email"]
   })
 
-  if (!result.code)
-    throw new Error("Microsoft did not return an auth code")
+  if (!result.idToken) {
+    throw new Error("Microsoft did not return an ID token")
+  }
 
-  return result.code
+  return result.idToken
 }

@@ -25,7 +25,7 @@ public sealed class MicrosoftAuthController : ControllerBase
     [AllowAnonymous]
     public async Task<IActionResult> Exchange([FromBody] MicrosoftLoginRequest request)
     {
-        var msUser = await _validator.ValidateCode(request.Code);
+        var msUser = await _validator.ValidateCode(request.IdToken);
 
         // TEMP: derive IDs deterministically
         var userId = Guid.NewGuid();
