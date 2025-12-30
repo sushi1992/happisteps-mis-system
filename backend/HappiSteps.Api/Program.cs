@@ -51,7 +51,8 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddDbContext<HappiStepsDbContext>(options =>
 {
-    options.UseSqlite("Data Source=happisteps.db");
+    options.UseNpgsql(
+        builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
 builder.Services.AddHttpContextAccessor();
@@ -59,6 +60,7 @@ builder.Services.AddScoped<IOrganisationContext, OrganisationContext>();
 
 builder.Services.AddScoped<IChildRepository, ChildRepository>();
 builder.Services.AddScoped<IAdmissionRepository, AdmissionRepository>();
+builder.Services.AddScoped<IStaffRepository, StaffRepository>();
 builder.Services.AddScoped<IAuditLogger, AuditLogger>();
 builder.Services.AddScoped<IUserContext, UserContext>();
 

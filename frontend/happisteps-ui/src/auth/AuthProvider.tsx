@@ -1,10 +1,29 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { AuthContext } from "./AuthContext"
+import { msal, msalReady } from "./msal"
+import { api } from "../api/http"
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [token, setTokenState] = useState<string | null>(() =>
     localStorage.getItem("auth.token")
   )
+  
+  const [checking, setChecking] = useState(() => !!token)
+
+  // Validate persisted auth token once on app startup.
+  // We intentionally do NOT re-run this when `token` changes
+  // (new tokens are trusted when set via login).
+  useEffect(() => {
+    if (!token) return
+
+    api("/api/auth/me")
+      .then(() => setChecking(false))
+      .catch(() => {
+        localStorage.removeItem("auth.token")
+        setTokenState(null)
+        setChecking(false)
+      })
+  }, [])
 
   const setToken = (token: string | null) => {
     if (token) {
@@ -12,11 +31,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } else {
       localStorage.removeItem("auth.token")
     }
-
     setTokenState(token)
   }
 
-  const logout = () => {
+  const logout = async () => {
+    await msalReady
+
+    await msal.logoutPopup({
+      postLogoutRedirectUri: window.location.origin
+    })
+
     localStorage.removeItem("auth.token")
     setTokenState(null)
   }
@@ -27,11 +51,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         token,
         setToken,
         logout,
-        ready: true // ✅ always ready
+        ready: !checking
       }}
     >
       {children}
     </AuthContext.Provider>
   )
 }
-

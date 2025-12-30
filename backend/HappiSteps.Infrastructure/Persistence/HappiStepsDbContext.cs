@@ -2,6 +2,7 @@ using HappiSteps.Domain.Admissions;
 using HappiSteps.Domain.Audit;
 using HappiSteps.Domain.Children;
 using HappiSteps.Domain.Identifiers;
+using HappiSteps.Domain.Staff;
 using Microsoft.EntityFrameworkCore;
 
 namespace HappiSteps.Infrastructure.Persistence;
@@ -17,6 +18,7 @@ public class HappiStepsDbContext : DbContext
     public DbSet<ChildIdentifier> ChildIdentifiers => Set<ChildIdentifier>();
     public DbSet<Admission> Admissions => Set<Admission>();
     public DbSet<AuditLogEntry> AuditLogEntries => Set<AuditLogEntry>();
+    public DbSet<StaffMember> StaffMembers => Set<StaffMember>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
