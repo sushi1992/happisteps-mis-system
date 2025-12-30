@@ -2,11 +2,19 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ChildrenList } from "./pages/ChildrenList";
 import { ChildDetails } from "./pages/ChildDetails";
 import { OnRollRegister } from "./pages/OnRollRegister";
-import { useDevLogin } from "./auth/useDevLogin"
-
+import { Login } from "./pages/Login"
+import { AuthContext } from "./auth/AuthContext"
+import { useContext } from "react"
 
 export default function App() {
-  useDevLogin() 
+  const { token, ready } = useContext(AuthContext);
+
+  if (!ready) return null;
+
+  if (!token) {
+    return <Login />;
+  }
+
   return (
     <BrowserRouter>
       <Routes>
@@ -16,5 +24,5 @@ export default function App() {
         <Route path="/registers/on-roll" element={<OnRollRegister />} />
       </Routes>
     </BrowserRouter>
-  );
+  )
 }

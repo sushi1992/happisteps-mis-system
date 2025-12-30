@@ -72,8 +72,10 @@ builder.Services.AddScoped<GetChildrenForOrganisationHandler>();
 builder.Services.AddScoped<GetChildDetailsHandler>();
 builder.Services.AddScoped<ArchiveChildHandler>();
 builder.Services.AddScoped<GetOrganisationDashboardStatsHandler>();
+builder.Services.AddScoped<ITokenIssuer, DevTokenIssuer>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddHttpClient<IMicrosoftTokenValidator, MicrosoftTokenValidator>();
 
 builder.Services.AddControllers();
 
@@ -103,7 +105,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("DevCors");
-
 app.UseAuthentication();
 app.UseAuthorization();
 

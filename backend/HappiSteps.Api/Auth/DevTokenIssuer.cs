@@ -3,10 +3,11 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using HappiSteps.Contracts.Auth;
+using HappiSteps.Application.Common.Interfaces;
 
 namespace HappiSteps.Api.Auth;
 
-public sealed class DevTokenIssuer
+public sealed class DevTokenIssuer : ITokenIssuer
 {
     private readonly string _signingKey;
 
@@ -18,14 +19,16 @@ public sealed class DevTokenIssuer
 
     public string IssueToken(
         Guid userId,
-        Guid organisationId)
+        Guid organisationId,
+        IReadOnlyCollection<string> roles)
     {
-        var claims = new[]
+        var claims = new List<Claim>
         {
             new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()),
-            new Claim("organisationId", organisationId.ToString()),
-            new Claim(ClaimTypes.Role, Roles.Admin)
+            new Claim("organisationId", organisationId.ToString())
         };
+
+        claims.AddRange(roles.Select(r => new Claim(ClaimTypes.Role, r)));
 
         var key = new SymmetricSecurityKey(
             Encoding.UTF8.GetBytes(_signingKey));

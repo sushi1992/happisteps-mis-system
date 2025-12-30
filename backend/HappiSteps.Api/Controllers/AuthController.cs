@@ -1,8 +1,8 @@
 using System.Security.Claims;
-using HappiSteps.Api.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
+using HappiSteps.Application.Common.Interfaces;
 
 namespace HappiSteps.Api.Controllers;
 
@@ -10,9 +10,9 @@ namespace HappiSteps.Api.Controllers;
 [Route("api/auth")]
 public sealed class AuthController : ControllerBase
 {
-    private readonly DevTokenIssuer _tokenIssuer;
+    private readonly ITokenIssuer _tokenIssuer;
 
-    public AuthController(DevTokenIssuer tokenIssuer)
+    public AuthController(ITokenIssuer tokenIssuer)
     {
         _tokenIssuer = tokenIssuer;
     }
@@ -26,24 +26,8 @@ public sealed class AuthController : ControllerBase
     {
         var token = _tokenIssuer.IssueToken(
             userId,
-            organisationId);
-
-        return Ok(new { token });
-    }
-
-    // REAL LOGIN (stubbed for now)
-    [HttpPost("login")]
-    [AllowAnonymous]
-    public IActionResult Login(LoginRequest request)
-    {
-        // TODO: validate credentials, load user, resolve roles
-
-        var userId = Guid.Parse("11111111-1111-1111-1111-111111111111");
-        var organisationId = Guid.Parse("22222222-2222-2222-2222-222222222222");
-
-        var token = _tokenIssuer.IssueToken(
-            userId,
-            organisationId);
+            organisationId,
+            ["Admin"]);
 
         return Ok(new { token });
     }

@@ -6,8 +6,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     localStorage.getItem("auth.token")
   )
 
-  const [ready, setReady] = useState(false)
-
   const setToken = (token: string | null) => {
     if (token) {
       localStorage.setItem("auth.token", token)
@@ -15,8 +13,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       localStorage.removeItem("auth.token")
     }
     setTokenState(token)
-    setReady(true)
   }
+
+  const ready = true
 
   return (
     <AuthContext.Provider value={{ token, setToken, ready }}>
